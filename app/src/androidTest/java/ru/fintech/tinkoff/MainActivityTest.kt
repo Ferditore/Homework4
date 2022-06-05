@@ -162,7 +162,6 @@ internal class MainActivityTest {
 @RunWith(Parameterized::class)
 class ParametrizedTests(private val pathToButtonCheckBoxes: Int) {
     @get: Rule
-    @JvmField
     val mActivityRule = ActivityTestRule(MainActivity::class.java)
 
 
@@ -172,25 +171,28 @@ class ParametrizedTests(private val pathToButtonCheckBoxes: Int) {
         fun data() : List<Int> {
             return listOf(
                 R.string.view_featured_article_card_title,
-                R.string.view_featured_article_card_title,
                 R.string.view_featured_image_card_title,
                 R.string.view_because_you_read_card_title,
                 R.string.view_card_news_title,
                 R.string.on_this_day_card_title,
                 R.string.view_random_card_title,
-                R.string.view_main_page_card_title,
+                R.string.view_main_page_card_title
             )
         }
     }
 
+    @Before
+    fun setUp() {
+        val newMainActivityActions = MainActivityTest()
+        newMainActivityActions.skipTutorial()
+        newMainActivityActions.clickMore()
+        newMainActivityActions.clickSettings()
+        newMainActivityActions.clickToString()
+    }
+
     @Test
     fun testCaseSecond() {
-        onView(withId(R.id.fragment_onboarding_skip_button))
-            .perform(click())
-        onView(withId(R.id.menu_icon)).perform(click())
-        onView(withId(R.id.main_drawer_settings_container)).perform(click())
-        onView(withText(R.string.preference_title_customize_explore_feed))
-            .perform(click())
+
         if  (pathToButtonCheckBoxes == R.string.view_main_page_card_title ||
         pathToButtonCheckBoxes == R.string.view_random_card_title) {
             onView(withId(R.id.content_types_recycler)).perform(swipeUp())}
